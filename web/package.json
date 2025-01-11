@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bunx --bun vite --host",
-    "build": "tsc -b && bunx --bun vite build",
+    "dev": "pnpm vite --host",
+    "build": "tsc -b && pnpm vite build",
     "lint": "eslint . --report-unused-disable-directives",
-    "preview": "bunx --bun vite preview"
+    "preview": "pnpm vite preview"
   },
   "dependencies": {
     "@neutralinojs/lib": "^5.5.0",

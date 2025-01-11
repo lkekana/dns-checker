@@ -7,10 +7,10 @@
     "distributionPath": "/dist/",
     "extensionsPath": "/extensions/",
     "frontendLibrary": {
-      "buildCommand": "bun run build",
-      "devCommand": "bun run dev",
-      "devUrl": "http://localhost:4200",
-      "initCommand": "bun install",
+      "buildCommand": "pnpm build",
+      "devCommand": "pnpm dev",
+      "devUrl": "http://localhost:3000",
+      "initCommand": "pnpm install",
       "patchFile": "/web/index.html",
       "projectPath": "/web/"
     },
