@@ -4,9 +4,10 @@ import { Centered } from './Centered';
 interface TestItemProps {
     state: 'success' | 'failure' | 'pending';
     testName: string;
+    runTest(): boolean;
 }
 
-const TestItem: React.FC<TestItemProps> = ({ state, testName }) => {
+const TestItem: React.FC<TestItemProps> = ({ state, testName, runTest }) => {
     const getBadgeClass = () => {
         switch (state) {
             case 'success':
@@ -15,6 +16,19 @@ const TestItem: React.FC<TestItemProps> = ({ state, testName }) => {
                 return 'badge-error';
             case 'pending':
                 return 'badge-warning';
+            default:
+                return '';
+        }
+    };
+
+    const getButtonState = () => {
+        switch (state) {
+            case 'success':
+                return 'Test';
+            case 'failure':
+                return 'Retry';
+            case 'pending':
+                return 'Cancel';
             default:
                 return '';
         }
@@ -33,7 +47,9 @@ const TestItem: React.FC<TestItemProps> = ({ state, testName }) => {
                     </div>
 
                     {/* Button */}
-                    <button className={`btn btn-neutral w-1/6`}>Test</button>
+                    <button className={`btn btn-neutral w-1/6`} onClick={runTest}>
+                        {getButtonState()}
+                    </button>
                 </div>
             </div>
         </Centered>
