@@ -1,5 +1,5 @@
-import { Centered } from "../components/Centered"
-import TestItem from "../components/testitem";
+import { Centered } from "../components/Centered";
+import TestItem from "../components/TestItem";
 import { useTestStates } from "../teststates";
 
 type TechnologiesType = { name: string, logo: string, url: string }
@@ -37,6 +37,7 @@ export default function Home() {
             {tests.map(test => (
               <TestItem key={test.testName} state={test.state} testName={test.testName} runTest={test.runTest} />
             ))}
+            <button className="btn btn-secondary">Run all</button>
           </div>
         </Centered>
       </>
