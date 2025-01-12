@@ -1,4 +1,6 @@
 import { Centered } from "../components/Centered"
+import TestItem from "../components/testitem";
+import { useTestStates } from "../teststates";
 
 type TechnologiesType = { name: string, logo: string, url: string }
 
@@ -23,9 +25,8 @@ const techDiv = (tech: TechnologiesType) => (
   </div>
 )
 
-const ITEM_SPACING = '';
-
 export default function Home() {
+  const { tests } = useTestStates();
   return (
       <>
         {/* <div className="grid grid-cols-[repeat(4,minmax(100px,1fr))]">
@@ -33,59 +34,9 @@ export default function Home() {
         </div> */}
         <Centered>
           <div className="flex flex-col w-5/6 border border-neutral-300 rounded-2xl p-4">
-            {/* Item 1 */}
-            <Centered>
-              <div className="w-full flex items-center justify-between px-4 py-2">
-                {/* Label */}
-                <span className={`${ITEM_SPACING}`}>Traditional DNS</span>
-
-                <div className="w-1/2 flex items-center gap-2 justify-between">
-                  {/* Badge */}
-                  <div className={`${ITEM_SPACING} badge badge-success w-20 text-center`}>
-                    success
-                  </div>
-
-                  {/* Button */}
-                  <button className={`${ITEM_SPACING} btn btn-neutral w-1/6`}>Test</button>
-                </div>
-              </div>
-            </Centered> 
-
-            {/* Item 2 */}
-            <Centered>
-            <div className="w-full flex items-center justify-between px-4 py-2">
-            {/* Label */}
-                <span className={`${ITEM_SPACING}`}>DNS over HTTPS (DoH)</span>
-
-                <div className="w-1/2 flex items-center gap-2 justify-between">
-                  {/* Badge */}
-                  <div className={`${ITEM_SPACING} badge badge-error w-20 text-center`}>
-                    failed
-                  </div>
-
-                  {/* Button */}
-                  <button className={`${ITEM_SPACING} btn btn-neutral w-1/6`}>Retry</button>
-                </div>
-              </div>
-            </Centered> 
-
-            {/* Item 3 */}
-            <Centered>
-            <div className="w-full flex items-center justify-between px-4 py-2">
-            {/* Label */}
-                <span className={`${ITEM_SPACING}`}>DNS over TLS (DoT)</span>
-
-                <div className="w-1/2 flex items-center gap-2 justify-between">
-                  {/* Badge */}
-                  <div className={`${ITEM_SPACING} badge badge-warning w-20 text-center`}>
-                    processing
-                  </div>
-
-                  {/* Button */}
-                  <button className={`${ITEM_SPACING} btn btn-neutral w-1/6`}>Cancel</button>
-                </div>
-              </div>
-            </Centered> 
+            {tests.map(test => (
+              <TestItem key={test.testName} state={test.state} testName={test.testName} runTest={test.runTest} />
+            ))}
           </div>
         </Centered>
       </>
