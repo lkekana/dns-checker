@@ -4,7 +4,7 @@ import { Centered } from './Centered';
 interface TestItemProps {
     state: 'success' | 'failure' | 'pending';
     testName: string;
-    runTest(): boolean;
+    runTest(): Promise<boolean>;
 }
 
 const TestItem: React.FC<TestItemProps> = ({ state, testName, runTest }) => {
