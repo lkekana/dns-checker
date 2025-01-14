@@ -1,15 +1,16 @@
 import { useState } from 'react';
+import { runTraditionalDNSTest } from './tests/traditional';
 
 type TestState = 'success' | 'failure' | 'pending';
 
 interface Test {
     testName: string;
     state: TestState;
-    runTest(): boolean;
+    runTest(): boolean | Promise<boolean>;
 }
 
 const initialTests: Test[] = [
-    { testName: 'Traditional DNS', state: 'success', runTest: () => true },
+    { testName: 'Traditional DNS', state: 'success', runTest: runTraditionalDNSTest },
     { testName: 'DNS over HTTPS (DoH)', state: 'failure', runTest: () => false },
     { testName: 'DNS over TLS (DoT)', state: 'pending', runTest: () => false },
     { testName: 'DNSCrypt (443)', state: 'success', runTest: () => true },
