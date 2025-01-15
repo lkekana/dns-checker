@@ -1,41 +1,42 @@
 {
-  "name": "web",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "pnpm vite --host",
-    "build": "tsc -b && pnpm vite build",
-    "lint": "eslint . --report-unused-disable-directives",
-    "preview": "pnpm vite preview"
-  },
-  "dependencies": {
-    "@neutralinojs/lib": "^5.5.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "wouter": "^3.3.5"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@eslint/js": "^9.16.0",
-    "@iconify/json": "^2.2.279",
-    "@types/bun": "^1.1.14",
-    "@types/node": "^22.10.1",
-    "@types/react": "^18.3.13",
-    "@types/react-dom": "^18.3.1",
-    "@unocss/preset-icons": "^0.65.1",
-    "@vitejs/plugin-react-swc": "^3.7.2",
-    "autoprefixer": "^10.4.20",
-    "daisyui": "^4.12.14",
-    "eslint": "^9.16.0",
-    "eslint-plugin-react-hooks": "^5.1.0-rc-de68d2f4-20241204",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "globals": "^15.13.0",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.17.0",
-    "unocss": "^0.65.1",
-    "vite": "^6.0.2"
-  }
+	"name": "web",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "pnpm vite --host",
+		"build": "tsc -b && pnpm vite build",
+		"lint": "eslint . --report-unused-disable-directives",
+		"format": "biome format --fix",
+		"preview": "pnpm vite preview"
+	},
+	"dependencies": {
+		"@neutralinojs/lib": "^5.5.0",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"wouter": "^3.3.5"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@eslint/js": "^9.16.0",
+		"@iconify/json": "^2.2.279",
+		"@types/bun": "^1.1.14",
+		"@types/node": "^22.10.1",
+		"@types/react": "^18.3.13",
+		"@types/react-dom": "^18.3.1",
+		"@unocss/preset-icons": "^0.65.1",
+		"@vitejs/plugin-react-swc": "^3.7.2",
+		"autoprefixer": "^10.4.20",
+		"daisyui": "^4.12.14",
+		"eslint": "^9.16.0",
+		"eslint-plugin-react-hooks": "^5.1.0-rc-de68d2f4-20241204",
+		"eslint-plugin-react-refresh": "^0.4.16",
+		"globals": "^15.13.0",
+		"postcss": "^8.4.49",
+		"tailwindcss": "^3.4.16",
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.17.0",
+		"unocss": "^0.65.1",
+		"vite": "^6.0.2"
+	}
 }

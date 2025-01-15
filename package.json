@@ -8,6 +8,8 @@
     "url": "https://github.com/Avaray/neutralino-react-ts-vite-bun"
   },
   "scripts": {
-    "install": "cd web && pnpm install && cd .. && neu update"
+    "install": "cd web && pnpm install && cd .. && neu update",
+    "lint": "cd web && pnpm run lint",
+    "format": "cd web && pnpm run format"
   }
 }
