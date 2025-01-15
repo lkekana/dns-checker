@@ -1,14 +1,13 @@
 import React from 'react';
 import { Centered } from './Centered';
+import type { Test } from '../teststates';
 
-interface TestItemProps {
-    state: 'success' | 'failure' | 'pending';
-    testName: string;
-    runTest(): Promise<boolean>;
-}
-
-const TestItem: React.FC<TestItemProps> = ({ state, testName, runTest }) => {
+const TestItem: React.FC<Test> = ({ state, testName, testHasRun, runTest }) => {
+    console.log('Render TestItem');
     const getBadgeClass = () => {
+        if (!testHasRun) {
+            return 'badge-warning';
+        }
         switch (state) {
             case 'success':
                 return 'badge-success';
@@ -22,6 +21,9 @@ const TestItem: React.FC<TestItemProps> = ({ state, testName, runTest }) => {
     };
 
     const getButtonState = () => {
+        if (!testHasRun) {
+            return 'Run';
+        }
         switch (state) {
             case 'success':
                 return 'Test';
@@ -33,6 +35,8 @@ const TestItem: React.FC<TestItemProps> = ({ state, testName, runTest }) => {
                 return '';
         }
     };
+
+    console.log({ testName, state, testHasRun, getButtonState: getButtonState() });
 
     return (
         <Centered>
@@ -47,7 +51,7 @@ const TestItem: React.FC<TestItemProps> = ({ state, testName, runTest }) => {
                     </div>
 
                     {/* Button */}
-                    <button className={`btn btn-neutral w-1/6`} onClick={runTest}>
+                    <button type='button'  className={'btn btn-neutral w-1/6'} onClick={runTest}>
                         {getButtonState()}
                     </button>
                 </div>
