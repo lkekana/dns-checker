@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTraditionalTest } from "./tests/traditional";
+import { useHttpsTest } from "./tests/https";
 
 export type TestState = "success" | "failure" | "pending" | "not run";
 
@@ -11,12 +12,6 @@ export interface Test {
 }
 
 const initialTests: Test[] = [
-	{
-		testName: "DNS over HTTPS (DoH)",
-		state: "failure",
-		testHasRun: false,
-		runTest: () => {},
-	},
 	{
 		testName: "DNS over TLS (DoT)",
 		state: "pending",
@@ -51,14 +46,16 @@ const initialTests: Test[] = [
 
 export const useTestStates = () => {
 	const traditionalDNS = useTraditionalTest();
+	const DoH = useHttpsTest();
 	const [tests, setTests] = useState<Test[]>(() => [
 		traditionalDNS,
+		DoH,
 		...initialTests,
 	]);
 
 	useEffect(() => {
-		setTests([traditionalDNS, ...initialTests]);
-	}, [traditionalDNS.state, traditionalDNS.testHasRun]);
+		setTests([traditionalDNS, DoH, ...initialTests]);
+	}, [traditionalDNS.state, traditionalDNS.testHasRun, DoH.state, DoH.testHasRun]);
 
 	return { tests };
 };
