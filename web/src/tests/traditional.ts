@@ -93,12 +93,6 @@ export const useTraditionalTest = (): Test => {
 		}
 	};
 
-	console.log({
-		testName: "Traditional DNS",
-		state,
-		testHasRun,
-		runTest: runTraditionalDNSTest,
-	});
 	return {
 		testName: "Traditional DNS",
 		state,

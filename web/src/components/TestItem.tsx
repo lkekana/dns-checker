@@ -3,7 +3,7 @@ import { Centered } from "./Centered";
 import type { Test } from "../teststates";
 
 const TestItem: React.FC<Test> = ({ state, testName, testHasRun, runTest }) => {
-	console.log("Render TestItem");
+	// console.log("Render TestItem");
 	const getBadgeClass = () => {
 		if (!testHasRun) {
 			return "badge-warning";
@@ -36,12 +36,12 @@ const TestItem: React.FC<Test> = ({ state, testName, testHasRun, runTest }) => {
 		}
 	};
 
-	console.log({
-		testName,
-		state,
-		testHasRun,
-		getButtonState: getButtonState(),
-	});
+	// console.log({
+	// 	testName,
+	// 	state,
+	// 	testHasRun,
+	// 	getButtonState: getButtonState(),
+	// });
 
 	return (
 		<Centered>

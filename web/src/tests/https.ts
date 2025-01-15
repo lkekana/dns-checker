@@ -3,28 +3,19 @@ import { runCommand } from "../cmd";
 import type { Test, TestState } from "../teststates";
 import { useState } from "react";
 import * as dnsPacket from 'dns-packet';
-// import { Buffer } from 'node:buffer';
-
-// const DNS_SERVERS = [
-//     // Google Public DNS
-//     "https://dns.google/dns-query",
-
-//     // Cloudflare DNS
-//     "https://cloudflare-dns.com/dns-query",
-
-//     // Adguard DNS
-//     "https://dns.adguard.com/dns-query",
-
-//     // OpenDNS
-//     "https://doh.opendns.com/dns-query",
-
-//     // Yandex DNS
-//     "https://dns.yandex.com/dns-query",
-// ];
 
 const DNS_SERVERS = [
     // Google Public DNS
     "https://dns.google/dns-query",
+
+    // Cloudflare DNS
+    "https://cloudflare-dns.com/dns-query",
+
+    // Adguard DNS
+    "https://dns.adguard.com/dns-query",
+
+    // OpenDNS
+    "https://doh.opendns.com/dns-query",
 ];
 
 /*
@@ -65,7 +56,7 @@ function createQueryURL(server: string, domain: string): string {
     return url;
 }
 
-function decodeB64Packet(encodedPacket: string): dnsPacket.Packet {
+function decodeB64Packet(encodedPacket: string): dnsPacket.DecodedPacket {
     // Decode the Base64-encoded packet
     const base64Packet = encodedPacket.replace(/-/g, '+').replace(/_/g, '/');
     const buffer = Buffer.from(base64Packet, 'base64');
@@ -85,42 +76,32 @@ export const useHttpsTest = (): Test => {
         const OStype = await getOS();
         if (OStype === OS.macOS) {
             // macOS
-            const url = createQueryURL("https://dns.google/dns-query", "example.com");
-            console.log(url);
-            console.log(`Running DoH test using server ${"https://dns.google/dns-query"}...`);
-            const cmd = `curl -s -X GET "${url}" | base64`;
-            const response = await runCommand(cmd);
-            console.log(response);
-            const decodedPacket = decodeB64Packet(response);
-            console.log(decodedPacket);
-            // console.log(await runCommand(`curl "${url}"`));
-
-            /*
-            return Promise.all(
+            return await Promise.all(
                 DNS_SERVERS.map(async (server) => {
-                    const cmd = `dig @${server} example.com | jc --dig`;
-                    console.log(cmd);
-                    console.log(`Running traditional DNS test using server ${server}...`);
+                    // const cmd = `dig @${server} example.com | jc --dig`;
+                    // console.log(cmd);
+                    // console.log(`Running traditional DNS test using server ${server}...`);
+                    // return runCommand(cmd);
+                    const url = createQueryURL(server, "example.com");
+                    console.log(url);
+                    console.log(`Running DoH test using server ${server}...`);
+                    const cmd = `curl -s -X GET "${url}" | base64`;
                     return runCommand(cmd);
-                }),
-            )
+                }))
                 .then((results) => {
                     console.log(`Results: ${results}`);
-                    for (const result of results) {
-                        const resultsObjArray = JSON.parse(result);
-                        if (!Array.isArray(resultsObjArray)) {
-                            console.error("Error: resultsObjArray is not an array");
+                    const decodedPackets = results.map((result) => decodeB64Packet(result));
+                    console.log(decodedPackets);
+                    for (const result of decodedPackets) {
+                        if (result.type !== 'response') {
+                            console.error("Error: result is not a response");
                             setState("failure");
                             return;
                         }
-                        if (resultsObjArray.length === 0) {
-                            console.error("Error: resultsObjArray is empty");
+                        if (result.answers?.length === 0) {
+                            console.error("Error: result has no answers");
                             setState("failure");
                             return;
-                        }
-                        if (!resultsObjArray[0].status || resultsObjArray[0].status !== "NOERROR") {
-                            console.error("Error: status is not NOERROR");
-                            setState("failure");
                         }
                     }
                     setState("success");
@@ -129,39 +110,6 @@ export const useHttpsTest = (): Test => {
                     console.error(`Error: ${error}`);
                     setState("failure");
                 });
-            */
-            // return await Promise.all(
-            //     DNS_SERVERS.map(async (server) => {
-            //         // const cmd = `dig @${server} example.com | jc --dig`;
-            //         // console.log(cmd);
-            //         // console.log(`Running traditional DNS test using server ${server}...`);
-            //         // return runCommand(cmd);
-            //         const url = createQueryURL(server, "example.com");
-            //         console.log(url);
-            //         console.log(`Running DoH test using server ${server}...`);
-            //         console.log(await runCommand(`curl -s -X GET ${url}`));
-            //     }))
-            //     .then(() => {
-            //         // console.log(`Results: ${results}`);
-            //         // for (const result of results) {
-            //         //     const resultsObjArray = JSON.parse(result);
-            //         //     if (!Array.isArray(resultsObjArray)) {
-            //         //         console.error("Error: resultsObjArray is not an array");
-            //         //         setState("failure");
-            //         //         return;
-            //         //     }
-            //         //     if (resultsObjArray.length === 0) {
-            //         //         console.error("Error: resultsObjArray is empty");
-            //         //         setState("failure");
-            //         //         return;
-            //         //     }
-            //         //     if (!resultsObjArray[0].status || resultsObjArray[0].status !== "NOERROR") {
-            //         //         console.error("Error: status is not NOERROR");
-            //         //         setState("failure");
-            //         //     }
-            //         // }
-            //         setState("success");
-            //     });
         }
 
         if (OStype === OS.Windows) {
