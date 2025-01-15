@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { runTraditionalDNSTest } from './tests/traditional';
 
-type TestState = 'success' | 'failure' | 'pending';
+export type TestState = 'success' | 'failure' | 'pending' | 'not run';
 
-interface Test {
+export interface Test {
     testName: string;
     state: TestState;
     runTest(): boolean | Promise<boolean>;
