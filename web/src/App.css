@@ -4,19 +4,19 @@
 
 html,
 body {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 .btn {
-  @apply no-animation;
+	@apply no-animation;
 }
 
 .logo {
-  will-change: filter;
-  transition: filter 250ms;
+	will-change: filter;
+	transition: filter 250ms;
 }
 
 .logo:hover {
-  filter: drop-shadow(0 0 1em rgba(135, 193, 230, 0.25));
+	filter: drop-shadow(0 0 1em rgba(135, 193, 230, 0.25));
 }
