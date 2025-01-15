@@ -39,6 +39,20 @@ export const useTraditionalTest = (): Test => {
 			)
 				.then((results) => {
 					console.log(`Results: ${results}`);
+					for (const result of results) {
+						const resultsObjArray = JSON.parse(result);
+						if (!Array.isArray(resultsObjArray)) {
+							setState("failure");
+							return;
+						}
+						if (resultsObjArray.length === 0) {
+							setState("failure");
+							return;
+						}
+						if (!resultsObjArray[0].status || resultsObjArray[0].status !== "NOERROR") {
+							setState("failure");
+						}
+					}
 					setState("success");
 				})
 				.catch((error) => {
