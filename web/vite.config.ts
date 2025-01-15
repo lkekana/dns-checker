@@ -4,6 +4,7 @@ import UnoCSS from "unocss/vite";
 import type { ResolvedConfig, Plugin } from "vite";
 import { defineConfig } from "vite";
 import unoConfig from "./unocss";
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 const neutralino = (): Plugin => {
 	let config: ResolvedConfig;
@@ -38,7 +39,7 @@ const neutralino = (): Plugin => {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [UnoCSS(unoConfig), react(), neutralino()],
+	plugins: [UnoCSS(unoConfig), react(), neutralino(), nodePolyfills({protocolImports: true})],
 	server: {
 		port: 3000,
 		strictPort: true,

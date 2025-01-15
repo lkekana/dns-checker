@@ -40,6 +40,7 @@
 		"typescript": "^5.7.2",
 		"typescript-eslint": "^8.17.0",
 		"unocss": "^0.65.1",
-		"vite": "^6.0.2"
+		"vite": "^6.0.2",
+		"vite-plugin-node-polyfills": "^0.22.0"
 	}
 }
