@@ -1,44 +1,61 @@
-import { app, computer, os, events } from '@neutralinojs/lib';
 import { getOS, OS } from '../environment';
 import { runCommand } from '../cmd';
+import type { Test, TestState } from '../teststates';
+import { useState } from 'react';
 
-export const runTraditionalDNSTest = async (): Promise<boolean> => {
-    const OStype = await getOS();
-    if (OStype === OS.macOS) {
-        // macOS
+const DNS_SERVERS = [
+    '8.8.8.8',
+];
 
-        const cmd = `dig @${'8.8.8.8'} example.com | jc --dig`;
-        console.log(cmd);
-        console.log('Running traditional DNS test...');
-        const output = await runCommand(cmd);
-        console.log(`Output (length=${output.length}): ${output}`);
-        // const digProc = await os.spawnProcess(cmd);
-        // let digStdOut = '';
-        // let digStdErr = '';
-        // events.on('spawnedProcess', (evt) => {
-        //     if(digProc.id === evt.detail.id) {
-        //         switch(evt.detail.action) {
-        //             case 'stdOut':
-        //                 console.log(evt.detail.data);
-        //                 digStdOut += evt.detail.data;
-        //                 break;
-        //             case 'stdErr':
-        //                 console.error(evt.detail.data);
-        //                 digStdErr += evt.detail.data;
-        //                 break;
-        //             case 'exit':
-        //                 console.log(`Dig process terminated with exit code: ${evt.detail.data}`);
+/*
+const initialTests: Test[] = [
+    { testName: 'Traditional DNS', state: 'success', runTest: runTraditionalDNSTest },
+    { testName: 'DNS over HTTPS (DoH)', state: 'failure', runTest: () => false },
+    { testName: 'DNS over TLS (DoT)', state: 'pending', runTest: () => false },
+    { testName: 'DNSCrypt (443)', state: 'success', runTest: () => true },
+    { testName: 'DNSCrypt (5353)', state: 'failure', runTest: () => false },
+    { testName: 'DNSCrypt (53)', state: 'pending', runTest: () => false },
+    { testName: 'ODoH (443)', state: 'success', runTest: () => true },
+];
+*/
 
-        //                 break;
-        //         }
-        //     }
-        // });
-    }
-    else if (OStype === OS.Windows) {
-        // Windows
-    }
-    else if (OStype === OS.Linux) {
-        // Linux
-    }
-    return true;
-}
+export const useTraditionalTest = (): Test => {
+    const [state, setState] = useState<TestState>('not run');
+    const [testHasRun, setTestHasRun] = useState<boolean>(false);
+
+    console.log({ state, testHasRun });
+
+    const runTraditionalDNSTest = async () => {
+        setState('pending');
+        setTestHasRun(true);
+        const OStype = await getOS();
+        if (OStype === OS.macOS) {
+            // macOS
+            return Promise.all(DNS_SERVERS.map(async (server) => {
+                const cmd = `dig @${server} example.com | jc --dig`;
+                console.log(cmd);
+                console.log(`Running traditional DNS test using server ${server}...`);
+                return runCommand(cmd);
+            }))
+            .then((results) => {
+                console.log(`Results: ${results}`);
+                setState('success');
+            })
+            .catch((error) => {
+                console.error(`Error: ${error}`);
+                setState('failure');
+            });
+        }
+    
+        if (OStype === OS.Windows) {
+            // Windows
+        }
+    
+        if (OStype === OS.Linux) {
+            // Linux
+        }
+    };
+
+    console.log({ testName: 'Traditional DNS', state, testHasRun, runTest: runTraditionalDNSTest });
+    return { testName: 'Traditional DNS', state, testHasRun, runTest: runTraditionalDNSTest };
+};
