@@ -4,5 +4,8 @@
     "biome.lspBin": "web/node_modules/@biomejs/biome/bin/biome",
     "[typescriptreact]": {
         "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "biomejs.biome"
     }
 }
