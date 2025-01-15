@@ -3,7 +3,27 @@ import { runCommand } from "../cmd";
 import type { Test, TestState } from "../teststates";
 import { useState } from "react";
 
-const DNS_SERVERS = ["8.8.8.8"];
+const DNS_SERVERS = [
+	// Google Public DNS
+	"8.8.8.8",
+	"8.8.4.4",
+
+	// Cloudflare DNS
+	"1.1.1.1",
+	"1.0.0.1",
+
+	// Adguard DNS
+	"94.140.14.14",
+	"94.140.15.15",
+
+	// OpenDNS
+	"208.67.222.222",
+	"208.67.220.220",
+
+	// Yandex DNS
+	"77.88.8.8",
+	"77.88.8.1",
+];
 
 /*
 const initialTests: Test[] = [
@@ -42,14 +62,17 @@ export const useTraditionalTest = (): Test => {
 					for (const result of results) {
 						const resultsObjArray = JSON.parse(result);
 						if (!Array.isArray(resultsObjArray)) {
+							console.error("Error: resultsObjArray is not an array");
 							setState("failure");
 							return;
 						}
 						if (resultsObjArray.length === 0) {
+							console.error("Error: resultsObjArray is empty");
 							setState("failure");
 							return;
 						}
 						if (!resultsObjArray[0].status || resultsObjArray[0].status !== "NOERROR") {
+							console.error("Error: status is not NOERROR");
 							setState("failure");
 						}
 					}
