@@ -1,0 +1,19 @@
+# PyInstaller
+# --------------
+# Usually these files are written by a python script from PyInstaller:
+*.spec
+
+# Folder created by PyInstaller:
+/build/
+/dist/
+
+# PyInstaller log and output files
+*.log
+*.manifest
+*.dll
+*.so
+*.dylib
+*.pyd
+
+# Python cache
+__pycache__/
