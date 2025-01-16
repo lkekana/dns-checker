@@ -56,7 +56,7 @@ function createQueryURL(server: string, domain: string): string {
     return url;
 }
 
-function decodeB64Packet(encodedPacket: string): dnsPacket.DecodedPacket {
+export function decodeB64Packet(encodedPacket: string): dnsPacket.DecodedPacket {
     // Decode the Base64-encoded packet
     const base64Packet = encodedPacket.replace(/-/g, '+').replace(/_/g, '/');
     const buffer = Buffer.from(base64Packet, 'base64');
@@ -76,7 +76,7 @@ export const useHttpsTest = (): Test => {
         const OStype = await getOS();
         if (OStype === OS.macOS) {
             // macOS
-            return await Promise.all(
+            return Promise.all(
                 DNS_SERVERS.map(async (server) => {
                     // const cmd = `dig @${server} example.com | jc --dig`;
                     // console.log(cmd);
