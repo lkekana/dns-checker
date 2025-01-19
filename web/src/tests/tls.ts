@@ -2,7 +2,6 @@ import { getOS, OS } from "../environment";
 import { runCommand } from "../cmd";
 import type { Test, TestState } from "../teststates";
 import { useState } from "react";
-import { query } from "dns-over-tls";
 import { decodeB64Packet } from "./https";
 
 const DNS_SERVERS = [

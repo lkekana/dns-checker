@@ -14,7 +14,7 @@ import dnsstamps.formatter
 
 def decode_dns_stamp(stamp: str) -> Parameter:
     p = parse(stamp)
-    dnsstamps.formatter.format(p)
+    # dnsstamps.formatter.format(p)
     return p
 
 def query_dns_over_dnscrypt(query_name, sdns_stamp, port):
