@@ -2,7 +2,7 @@ import { getOS, OS } from "../environment";
 import { runCommand } from "../cmd";
 import type { Test, TestState } from "../teststates";
 import { useState } from "react";
-import { decodeB64Packet } from "./https";
+import { decodeB64Packet } from "../lib/packet";
 
 const DNS_SERVERS = [
     // Google Public DNS
