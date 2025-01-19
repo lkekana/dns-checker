@@ -49,18 +49,6 @@ const DNS_SERVERS: DNSCryptPair[] = [
     },
 ];
 
-/*
-const initialTests: Test[] = [
-    { testName: 'Traditional DNS', state: 'success', runTest: runDNSCryptTest443 },
-    { testName: 'DNS over HTTPS (DoH)', state: 'failure', runTest: () => false },
-    { testName: 'DNS over TLS (DoT)', state: 'pending', runTest: () => false },
-    { testName: 'DNSCrypt (443)', state: 'success', runTest: () => true },
-    { testName: 'DNSCrypt (5353)', state: 'failure', runTest: () => false },
-    { testName: 'DNSCrypt (53)', state: 'pending', runTest: () => false },
-    { testName: 'ODoH (443)', state: 'success', runTest: () => true },
-];
-*/
-
 export const useDNSCryptTest = (): Test => {
     const [state, setState] = useState<TestState>("not run");
     const [testHasRun, setTestHasRun] = useState<boolean>(false);
@@ -77,8 +65,7 @@ export const useDNSCryptTest = (): Test => {
                 DNS_SERVERS.map(async (server) => {
                     const cmd = `./web/helpers/dist/dnscrypttt -d "example.com" -s ${server.sdns_stamp} -p ${server.port}`;
                     console.log(cmd);
-                    const p = DNSStamp.parse(server.sdns_stamp) as DNSStamp.DNSCrypt;
-                    console.log(`Running DoT test using server '${server.name}' (${p.providerName} ${p.addr})...`);
+                    console.log(`Running DNSCrypt test using server '${server.name}'...`);
                     return runCommand(cmd);
                 }),
             )

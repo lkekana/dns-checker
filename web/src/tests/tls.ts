@@ -26,18 +26,6 @@ const DNS_SERVERS = [
     "77.88.8.1",
 ];
 
-/*
-const initialTests: Test[] = [
-    { testName: 'Traditional DNS', state: 'success', runTest: runTLSTest },
-    { testName: 'DNS over HTTPS (DoH)', state: 'failure', runTest: () => false },
-    { testName: 'DNS over TLS (DoT)', state: 'pending', runTest: () => false },
-    { testName: 'DNSCrypt (443)', state: 'success', runTest: () => true },
-    { testName: 'DNSCrypt (5353)', state: 'failure', runTest: () => false },
-    { testName: 'DNSCrypt (53)', state: 'pending', runTest: () => false },
-    { testName: 'ODoH (443)', state: 'success', runTest: () => true },
-];
-*/
-
 export const useTLSTest = (): Test => {
     const [state, setState] = useState<TestState>("not run");
     const [testHasRun, setTestHasRun] = useState<boolean>(false);

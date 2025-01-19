@@ -18,18 +18,6 @@ const DNS_SERVERS = [
     "https://doh.opendns.com/dns-query",
 ];
 
-/*
-const initialTests: Test[] = [
-    { testName: 'Traditional DNS', state: 'success', runTest: runTraditionalDNSTest },
-    { testName: 'DNS over HTTPS (DoH)', state: 'failure', runTest: () => false },
-    { testName: 'DNS over TLS (DoT)', state: 'pending', runTest: () => false },
-    { testName: 'DNSCrypt (443)', state: 'success', runTest: () => true },
-    { testName: 'DNSCrypt (5353)', state: 'failure', runTest: () => false },
-    { testName: 'DNSCrypt (53)', state: 'pending', runTest: () => false },
-    { testName: 'ODoH (443)', state: 'success', runTest: () => true },
-];
-*/
-
 // Function to encode a DNS query to Base64 URL-safe format
 function createDnsBody(domain: string): string {
     // Create a DNS query for the given domain (A record)
