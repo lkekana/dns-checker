@@ -15,6 +15,7 @@ const DNS_SERVERS: ODoHPair[] = [
         proxy: "https://ibksturm.synology.me/proxy",
     }
 ];
+const SUCCESS_THRESHOLD = 0.7;
 
 export const useObliviousTest = (): Test => {
     const [state, setState] = useState<TestState>("not run");
@@ -28,7 +29,7 @@ export const useObliviousTest = (): Test => {
         const OStype = await getOS();
         if (OStype === OS.macOS) {
             // macOS
-            return Promise.all(
+            return Promise.allSettled(
                 DNS_SERVERS.map(async (server) => {
                     const cmd = `./web/helpers/odoh-client-rs/target/debug/odoh-client-rs -t "${server.resolver}" -p "${server.proxy}" "example.com"`;
                     console.log(cmd);
@@ -37,22 +38,35 @@ export const useObliviousTest = (): Test => {
                 }),
             )
                 .then((results) => {
-                    console.log(`Results: ${results}`);
-                    const decodedPackets = results.map((result) => decodeB64Packet(result));
-                    console.log(decodedPackets);
-                    for (const result of decodedPackets) {
+                    console.log(`Results: ${results.map((r) => r.status)}`);
+                    let fulfilled = 0;
+                    for (const r of results) {
+                        if (r.status === "rejected") {
+                            console.error(`Error: ${r.reason}`);
+                            // setState("failure");
+                            // return;
+                            continue;
+                        }
+                        const result = decodeB64Packet(r.value);
                         if (result.type !== 'response') {
                             console.error("Error: result is not a response");
-                            setState("failure");
-                            return;
+                            // setState("failure");
+                            // return;
+                            continue;
                         }
                         if (result.answers?.length === 0) {
                             console.error("Error: result has no answers");
-                            setState("failure");
-                            return;
+                            // setState("failure");
+                            // return;
+                            continue;
                         }
+                        fulfilled++;
                     }
-                    setState("success");
+                    if (fulfilled >= DNS_SERVERS.length * SUCCESS_THRESHOLD) {
+                        setState("success");
+                    } else {
+                        setState("failure");
+                    }
                 })
                 .catch((error) => {
                     console.error(`Error: ${error}`);

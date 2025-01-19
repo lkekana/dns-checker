@@ -24,6 +24,7 @@ const DNS_SERVERS = [
 	"77.88.8.8",
 	"77.88.8.1",
 ];
+const SUCCESS_THRESHOLD = 0.7;
 
 export const useTraditionalTest = (): Test => {
 	const [state, setState] = useState<TestState>("not run");
@@ -37,7 +38,7 @@ export const useTraditionalTest = (): Test => {
 		const OStype = await getOS();
 		if (OStype === OS.macOS) {
 			// macOS
-			return Promise.all(
+            return Promise.allSettled(
 				DNS_SERVERS.map(async (server) => {
 					const cmd = `dig @${server} example.com | jc --dig`;
 					console.log(cmd);
@@ -46,25 +47,43 @@ export const useTraditionalTest = (): Test => {
 				}),
 			)
 				.then((results) => {
-					console.log(`Results: ${results}`);
-					for (const result of results) {
-						const resultsObjArray = JSON.parse(result);
+                    console.log(`Results: ${results.map((r) => r.status)}`);
+                    let fulfilled = 0;
+                    for (const r of results) {
+						console.log("r: ", r);
+                        if (r.status === "rejected") {
+                            console.error(`Error: ${r.reason}`);
+                            // setState("failure");
+                            // return;
+                            continue;
+                        }
+						console.log(r.value);
+						const resultsObjArray = JSON.parse(r.value);
 						if (!Array.isArray(resultsObjArray)) {
 							console.error("Error: resultsObjArray is not an array");
-							setState("failure");
-							return;
+                            // setState("failure");
+                            // return;
+                            continue;
 						}
 						if (resultsObjArray.length === 0) {
 							console.error("Error: resultsObjArray is empty");
-							setState("failure");
-							return;
+                            // setState("failure");
+                            // return;
+                            continue;
 						}
 						if (!resultsObjArray[0].status || resultsObjArray[0].status !== "NOERROR") {
 							console.error("Error: status is not NOERROR");
-							setState("failure");
+                            // setState("failure");
+                            // return;
+                            continue;
 						}
-					}
-					setState("success");
+                        fulfilled++;
+                    }
+                    if (fulfilled >= DNS_SERVERS.length * SUCCESS_THRESHOLD) {
+                        setState("success");
+                    } else {
+                        setState("failure");
+                    }
 				})
 				.catch((error) => {
 					console.error(`Error: ${error}`);
