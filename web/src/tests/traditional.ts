@@ -40,7 +40,7 @@ export const useTraditionalTest = (): Test => {
 			// macOS
             return Promise.allSettled(
 				DNS_SERVERS.map(async (server) => {
-					const cmd = `dig @${server} example.com | jc --dig`;
+					const cmd = `dig @${server} example.com | jc --dig | base64`;
 					console.log(cmd);
 					console.log(`Running traditional DNS test using server ${server}...`);
 					return runCommand(cmd);
@@ -57,8 +57,10 @@ export const useTraditionalTest = (): Test => {
                             // return;
                             continue;
                         }
-						console.log(r.value);
-						const resultsObjArray = JSON.parse(r.value);
+						const jsonStr = Buffer.from(r.value.trim(), 'base64');
+						console.log(jsonStr);
+						const resultsObjArray = JSON.parse(jsonStr.toString());
+						console.log(resultsObjArray);
 						if (!Array.isArray(resultsObjArray)) {
 							console.error("Error: resultsObjArray is not an array");
                             // setState("failure");
