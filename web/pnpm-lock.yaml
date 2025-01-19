@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@leichtgewicht/dnsstamp':
-        specifier: ^1.1.4
-        version: 1.1.4
       '@neutralinojs/lib':
         specifier: ^5.5.0
         version: 5.5.0
@@ -570,9 +567,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
-
-  '@leichtgewicht/dnsstamp@1.1.4':
-    resolution: {integrity: sha512-qqyR2dNLDTG7vWZktgterDOVMoutZI4ofAyaIRghnm68l0a6wCm1rYw1PQK2mW5Fx8mjmb/EvworxSuB/GIYnQ==}
 
   '@leichtgewicht/ip-codec@2.0.5':
     resolution: {integrity: sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==}
@@ -2653,10 +2647,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
-
-  '@leichtgewicht/dnsstamp@1.1.4':
-    dependencies:
-      urlsafe-base64: 1.0.0
 
   '@leichtgewicht/ip-codec@2.0.5': {}
 
