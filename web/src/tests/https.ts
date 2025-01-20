@@ -16,6 +16,9 @@ const DNS_SERVERS = [
 
     // OpenDNS
     "https://doh.opendns.com/dns-query",
+
+    // Quad9 DNS
+    "https://dns.quad9.net/dns-query",
 ];
 const SUCCESS_THRESHOLD = 0.7;
 
