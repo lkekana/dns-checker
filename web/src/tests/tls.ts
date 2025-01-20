@@ -2,7 +2,7 @@ import { getOS, OS } from "../environment";
 import { runCommand } from "../cmd";
 import type { Test, TestState } from "../teststates";
 import { useState } from "react";
-import { decodeB64Packet } from "../lib/packet";
+import { JSONMsg } from "../lib/dnslookup_types";
 
 const DNS_SERVERS = [
     // Google Public DNS
@@ -41,7 +41,7 @@ export const useTLSTest = (): Test => {
             // macOS
             return Promise.allSettled(
                 DNS_SERVERS.map(async (server) => {
-                    const cmd = `./web/helpers/dist/tls -d "example.com" -s ${server}`;
+                    const cmd = `JSON=1 ./web/helpers/dnslookup "example.com" "tls://${server}" | base64`;
                     console.log(cmd);
                     console.log(`Running DoT test using server ${server}...`);
                     return runCommand(cmd);
@@ -57,14 +57,17 @@ export const useTLSTest = (): Test => {
                             // return;
                             continue;
                         }
-                        const result = decodeB64Packet(r.value);
-                        if (result.type !== 'response') {
+						const jsonStr = Buffer.from(r.value.trim(), 'base64');
+						console.log(jsonStr);
+                        const result = JSON.parse(jsonStr.toString()) as JSONMsg;
+                        console.log(result);
+                        if (!result.Response) {
                             console.error("Error: result is not a response");
                             // setState("failure");
                             // return;
                             continue;
                         }
-                        if (result.answers?.length === 0) {
+                        if (result.Answer.length === 0) {
                             console.error("Error: result has no answers");
                             // setState("failure");
                             // return;

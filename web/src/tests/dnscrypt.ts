@@ -2,7 +2,7 @@ import { getOS, OS } from "../environment";
 import { runCommand } from "../cmd";
 import type { Test, TestState } from "../teststates";
 import { useState } from "react";
-import { decodeB64Packet } from "../lib/packet";
+import { JSONMsg } from "../lib/dnslookup_types";
 
 type DNSCryptPair = {
     name: string;
@@ -63,7 +63,7 @@ export const useDNSCryptTest = (): Test => {
             // macOS
             return Promise.allSettled(
                 DNS_SERVERS.map(async (server) => {
-                    const cmd = `./web/helpers/dist/dnscrypttt -d "example.com" -s ${server.sdns_stamp} -p ${server.port}`;
+                    const cmd = `JSON=1 ./web/helpers/dnslookup "example.com" "${server.sdns_stamp}" | base64`;
                     console.log(cmd);
                     console.log(`Running DNSCrypt test using server '${server.name}'...`);
                     return runCommand(cmd);
@@ -79,14 +79,17 @@ export const useDNSCryptTest = (): Test => {
                             // return;
                             continue;
                         }
-                        const result = decodeB64Packet(r.value);
-                        if (result.type !== 'response') {
+                        const jsonStr = Buffer.from(r.value.trim(), 'base64');
+                        console.log(jsonStr);
+                        const result = JSON.parse(jsonStr.toString()) as JSONMsg;
+                        console.log(result);
+                        if (!result.Response) {
                             console.error("Error: result is not a response");
                             // setState("failure");
                             // return;
                             continue;
                         }
-                        if (result.answers?.length === 0) {
+                        if (result.Answer.length === 0) {
                             console.error("Error: result has no answers");
                             // setState("failure");
                             // return;
