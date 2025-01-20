@@ -57,23 +57,31 @@ export const useTLSTest = (): Test => {
                             // return;
                             continue;
                         }
-						const jsonStr = Buffer.from(r.value.trim(), 'base64');
-						console.log(jsonStr);
-                        const result = JSON.parse(jsonStr.toString()) as JSONMsg;
-                        console.log(result);
-                        if (!result.Response) {
-                            console.error("Error: result is not a response");
+                        try {
+                            const jsonStr = Buffer.from(r.value.trim(), 'base64');
+                            console.log(jsonStr);
+                            const result = JSON.parse(jsonStr.toString()) as JSONMsg;
+                            console.log(result);
+                            if (!result.Response) {
+                                console.error("Error: result is not a response");
+                                // setState("failure");
+                                // return;
+                                continue;
+                            }
+                            if (result.Answer.length === 0) {
+                                console.error("Error: result has no answers");
+                                // setState("failure");
+                                // return;
+                                continue;
+                            }
+                            fulfilled++;
+                        }
+                        catch (error) {
+                            console.error(`Error: ${error}`);
                             // setState("failure");
                             // return;
                             continue;
                         }
-                        if (result.Answer.length === 0) {
-                            console.error("Error: result has no answers");
-                            // setState("failure");
-                            // return;
-                            continue;
-                        }
-                        fulfilled++;
                     }
                     if (fulfilled >= DNS_SERVERS.length * SUCCESS_THRESHOLD) {
                         setState("success");

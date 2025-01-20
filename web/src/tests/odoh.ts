@@ -47,20 +47,28 @@ export const useObliviousTest = (): Test => {
                             // return;
                             continue;
                         }
-                        const result = decodeB64Packet(r.value);
-                        if (result.type !== 'response') {
-                            console.error("Error: result is not a response");
+                        try {
+                            const result = decodeB64Packet(r.value);
+                            if (result.type !== 'response') {
+                                console.error("Error: result is not a response");
+                                // setState("failure");
+                                // return;
+                                continue;
+                            }
+                            if (result.answers?.length === 0) {
+                                console.error("Error: result has no answers");
+                                // setState("failure");
+                                // return;
+                                continue;
+                            }
+                            fulfilled++;
+                        }
+                        catch (error) {
+                            console.error(`Error: ${error}`);
                             // setState("failure");
                             // return;
                             continue;
                         }
-                        if (result.answers?.length === 0) {
-                            console.error("Error: result has no answers");
-                            // setState("failure");
-                            // return;
-                            continue;
-                        }
-                        fulfilled++;
                     }
                     if (fulfilled >= DNS_SERVERS.length * SUCCESS_THRESHOLD) {
                         setState("success");

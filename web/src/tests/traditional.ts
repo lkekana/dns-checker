@@ -57,29 +57,37 @@ export const useTraditionalTest = (): Test => {
                             // return;
                             continue;
                         }
-						const jsonStr = Buffer.from(r.value.trim(), 'base64');
-						console.log(jsonStr);
-						const resultsObjArray = JSON.parse(jsonStr.toString());
-						console.log(resultsObjArray);
-						if (!Array.isArray(resultsObjArray)) {
-							console.error("Error: resultsObjArray is not an array");
-                            // setState("failure");
-                            // return;
-                            continue;
+						try {
+							const jsonStr = Buffer.from(r.value.trim(), 'base64');
+							console.log(jsonStr);
+							const resultsObjArray = JSON.parse(jsonStr.toString());
+							console.log(resultsObjArray);
+							if (!Array.isArray(resultsObjArray)) {
+								console.error("Error: resultsObjArray is not an array");
+								// setState("failure");
+								// return;
+								continue;
+							}
+							if (resultsObjArray.length === 0) {
+								console.error("Error: resultsObjArray is empty");
+								// setState("failure");
+								// return;
+								continue;
+							}
+							if (!resultsObjArray[0].status || resultsObjArray[0].status !== "NOERROR") {
+								console.error("Error: status is not NOERROR");
+								// setState("failure");
+								// return;
+								continue;
+							}
+							fulfilled++;
 						}
-						if (resultsObjArray.length === 0) {
-							console.error("Error: resultsObjArray is empty");
-                            // setState("failure");
-                            // return;
-                            continue;
+						catch (error) {
+							console.error(`Error: ${error}`);
+							// setState("failure");
+							// return;
+							continue;
 						}
-						if (!resultsObjArray[0].status || resultsObjArray[0].status !== "NOERROR") {
-							console.error("Error: status is not NOERROR");
-                            // setState("failure");
-                            // return;
-                            continue;
-						}
-                        fulfilled++;
                     }
                     if (fulfilled >= DNS_SERVERS.length * SUCCESS_THRESHOLD) {
                         setState("success");
