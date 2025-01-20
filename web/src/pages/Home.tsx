@@ -56,6 +56,11 @@ const techDiv = (tech: TechnologiesType) => (
 
 export default function Home() {
 	const { tests } = useTestStates();
+	const runAllTests = () => {
+		tests.forEach((test) => {
+			test.runTest();
+		});
+	};
 	return (
 		<>
 			{/* <div className="grid grid-cols-[repeat(4,minmax(100px,1fr))]">
@@ -72,7 +77,7 @@ export default function Home() {
 							testHasRun={test.testHasRun}
 						/>
 					))}
-					<button type="button" className="btn btn-secondary">
+					<button type="button" className="btn btn-secondary" onClick={runAllTests}>
 						Run all
 					</button>
 				</div>
